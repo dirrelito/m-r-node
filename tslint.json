@@ -1,0 +1,8 @@
+{
+    "extends": "tslint:latest",
+    "rules": {
+        "quotemarks": ["single"],
+        "max-classes-per-file":false,
+        "no-implicit-dependencies": [true, "dev"]
+    }
+}

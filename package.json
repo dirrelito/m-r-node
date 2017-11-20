@@ -1,0 +1,20 @@
+{
+  "name": "m-r-node",
+  "version": "1.0.0",
+  "description": "This will be a clone of the M-R app that is the standard CQRS implementation by Greg Young.",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ludvig Hult",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^8.0.53",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.6.1"
+  },
+  "devDependencies": {
+    "tslint": "^5.8.0"
+  }
+}
