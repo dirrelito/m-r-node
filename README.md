@@ -1,1 +1,3 @@
-This will be a clone of the M-R app that is the standard CQRS implementation by Greg Young.
+This is a clone of the M-R library that is the standard CQRS implementation, by Greg Young.
+
+I also hope to reimplement the front end.
