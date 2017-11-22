@@ -4,7 +4,8 @@ import {EventBus} from "./SimpleCQRS/EventBus";
 import {EventStore} from "./SimpleCQRS/EventStore";
 import {InventoryItemDetailView, InventoryListView, ReadModelFacade} from "./SimpleCQRS/ReadModel";
 
-import {CreateInventoryItem, DeactivateInventoryItem, RenameInventoryItem} from "./SimpleCQRS/Commands";
+import {CheckInItemsToInventory, CreateInventoryItem, DeactivateInventoryItem,
+     RemoveItemsFromInventory, RenameInventoryItem} from "./SimpleCQRS/Commands";
 import {InventoryItemCreated, InventoryItemDeactivated
     , InventoryItemRenamed, ItemsCheckedInToInventory, ItemsRemovedFromInventory} from "./SimpleCQRS/Events";
 
@@ -18,20 +19,27 @@ const ilv = new InventoryListView();
 
 eb.RegisterHandler({handle: ch.Handle,
                     messagesHandeled: [
-                        CreateInventoryItem, RenameInventoryItem, DeactivateInventoryItem,
+                        CreateInventoryItem, RenameInventoryItem, DeactivateInventoryItem
+                        , CheckInItemsToInventory, RemoveItemsFromInventory,
                     ]});
 eb.RegisterHandler({handle: iidv.Handle,
-                    messagesHandeled: [InventoryItemCreated, InventoryItemDeactivated
-                        , InventoryItemRenamed, ItemsCheckedInToInventory, ItemsRemovedFromInventory]});
+                    messagesHandeled: [
+                        InventoryItemCreated, InventoryItemDeactivated
+                        , InventoryItemRenamed, ItemsCheckedInToInventory, ItemsRemovedFromInventory,
+                    ]});
 eb.RegisterHandler({handle: ilv.Handle,
-                    messagesHandeled: [InventoryItemCreated, InventoryItemDeactivated, InventoryItemRenamed]});
+                    messagesHandeled: [
+                        InventoryItemCreated, InventoryItemDeactivated, InventoryItemRenamed,
+                    ]});
 
 eb.Send(new CreateInventoryItem("123", "hej"));
 eb.Send(new RenameInventoryItem("123", "mutter", 0));
 eb.Send(new DeactivateInventoryItem("123", 1));
 
 eb.Send(new CreateInventoryItem("321", "Gurka"));
-eb.Send(new RenameInventoryItem("321", "Bonde", 0));
+eb.Send(new CheckInItemsToInventory("321", 7, 0));
+eb.Send(new RemoveItemsFromInventory("321", 3, 1));
+eb.Send(new RenameInventoryItem("321", "Bonde", 2));
 
-console.log("\n\nList from Readmodel:",rmf.GetInventoryItems());
-console.log("\n\nDetails Readmodel:",rmf.GetInventoryItemDetails("321"));
+console.log("\n\nList from Readmodel:", rmf.GetInventoryItems());
+console.log("\n\nDetails Readmodel:", rmf.GetInventoryItemDetails("321"));
