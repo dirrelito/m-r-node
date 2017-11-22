@@ -1,4 +1,3 @@
-import { v4 as uuid} from "uuid";
 import {IEventPublisher} from "./EventBus";
 import {DomainEvent} from "./Events";
 
@@ -13,7 +12,7 @@ export class EventStore implements IEventStore {
     private readonly publisher;
     private readonly current: Map<uuid, EventDescriptor[]>  = new Map();
 
-    constructor(publisher: IEventPublisher) { // fix type here!
+    constructor(publisher: IEventPublisher) {
         this.publisher = publisher;
     }
 
