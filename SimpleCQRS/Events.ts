@@ -1,13 +1,16 @@
 type uuid = string;
 
 export class DomainEvent {
-    public version: number;
+    public Version: number;
+    constructor(Version: number) {
+        this.Version = Version;
+    }
 }
 
 export class InventoryItemDeactivated extends DomainEvent {
     public Id: uuid;
-    constructor(id) {
-        super();
+    constructor(id, Version) {
+        super(Version);
         this.Id = id;
     }
 
@@ -16,8 +19,8 @@ export class InventoryItemDeactivated extends DomainEvent {
 export class InventoryItemCreated extends DomainEvent {
     public Id: uuid;
     public Name: string;
-    constructor(id: uuid, name: string) {
-        super();
+    constructor(id: uuid, name: string, Version) {
+        super(Version);
         this.Id = id;
         this.Name = name;
     }
@@ -26,8 +29,8 @@ export class InventoryItemCreated extends DomainEvent {
 export class InventoryItemRenamed extends DomainEvent {
     public Id: uuid;
     public NewName: string;
-    constructor(id, newName) {
-        super();
+    constructor(id, newName, Version) {
+        super(Version);
         this.Id = id;
         this.NewName = newName;
     }
@@ -36,8 +39,8 @@ export class InventoryItemRenamed extends DomainEvent {
 export class ItemsCheckedInToInventory extends DomainEvent {
     public  Id: uuid;
     public readonly Count: number;
-    constructor(id, count) {
-        super();
+    constructor(id, count, Version) {
+        super(Version);
         this.Id = id;
         this.Count = count;
     }
@@ -45,9 +48,9 @@ export class ItemsCheckedInToInventory extends DomainEvent {
 
 export class ItemsRemovedFromInventory extends DomainEvent {
     public  Id: uuid;
-    public readonly Count: uuid;
-    constructor(id, count) {
-        super();
+    public readonly Count: number;
+    constructor(id, count, Version) {
+        super(Version);
         this.Id = id;
         this.Count = count;
     }

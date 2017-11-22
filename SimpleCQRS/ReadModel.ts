@@ -13,13 +13,13 @@ class InventoryItemDetailsDto {
     public Id: uuid ;
     public Name: string ;
     public CurrentCount: number ;
-    public version: number ;
+    public Version: number ;
 
-    constructor(id: uuid,  name: string,  currentCount: number, version: number) {
+    constructor(id: uuid,  name: string,  currentCount: number, Version: number) {
         this.Id = id;
         this.Name = name;
         this.CurrentCount = currentCount;
-        this.version = version;
+        this.Version = Version;
     }
 }
 
@@ -63,20 +63,35 @@ export class InventoryItemDetailView {
 
     public Handle(message: ItemsCheckedInToInventory | ItemsRemovedFromInventory | InventoryItemCreated |
         InventoryItemDeactivated | InventoryItemRenamed) {
-        // console.log(`Handling the event ${JSON.stringify(message)} in the details view`);
+
+        // console.log(`Handling the ${message.constructor.name}: ${JSON.stringify(message)} in the details view`);
+
         if (message instanceof InventoryItemCreated) {
             BullShitDatabase.details.set(message.Id, new InventoryItemDetailsDto(message.Id, message.Name, 0, 0));
+
         } else if (message instanceof InventoryItemRenamed) {
             const d = InventoryItemDetailView.GetDetailsItem(message.Id);
-            d.version = message.version;
+            d.Version = message.Version;
+            d.Name = message.NewName;
+            // console.log("input message:", message)
+            // console.log("Updated DTO:",d)
+            BullShitDatabase.details.set(message.Id, d);
+
         } else if (message instanceof ItemsCheckedInToInventory) {
             const d = InventoryItemDetailView.GetDetailsItem(message.Id);
-            d.version = message.version;
+            d.Version = message.Version;
+            d.CurrentCount = d.CurrentCount + message.Count;
+            BullShitDatabase.details.set(message.Id, d);
+
         } else if (message instanceof ItemsRemovedFromInventory) {
             const d: InventoryItemDetailsDto = InventoryItemDetailView.GetDetailsItem(message.Id);
-            d.version = message.version;
+            d.Version = message.Version;
+            d.CurrentCount = d.CurrentCount - message.Count;
+            BullShitDatabase.details.set(message.Id, d);
+
         } else if (message instanceof InventoryItemDeactivated) {
             BullShitDatabase.details.delete(message.Id);
+
         }  else {
             throw new Error("This Handler cannot handle this message type!");
         }
