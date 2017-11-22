@@ -13,7 +13,7 @@ export class EventBus implements ICommandSender, IEventPublisher {
 
     private routes: Map<Message, Array<Action<Message>>> = new Map();
 
-    public RegisterHandler(handler: IMessageHandler<Message>) {
+    public RegisterHandler<T extends Message>(handler: IMessageHandler<T>) {
         handler.messagesHandeled.forEach(messageHandled => {
             let handlers = this.routes.get(messageHandled);
 
