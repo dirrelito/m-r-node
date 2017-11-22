@@ -32,14 +32,14 @@ eb.RegisterHandler({handle: ilv.Handle,
                         InventoryItemCreated, InventoryItemDeactivated, InventoryItemRenamed,
                     ]});
 
-eb.Send(new CreateInventoryItem("123", "hej"));
-eb.Send(new RenameInventoryItem("123", "mutter", 0));
-eb.Send(new DeactivateInventoryItem("123", 1));
+eb.Send(new CreateInventoryItem("id1", "Mutter"));
+eb.Send(new RenameInventoryItem("id1", "Mutter model 1", 0));
+eb.Send(new DeactivateInventoryItem("id1", 1));
 
-eb.Send(new CreateInventoryItem("321", "Gurka"));
-eb.Send(new CheckInItemsToInventory("321", 7, 0));
-eb.Send(new RemoveItemsFromInventory("321", 3, 1));
-eb.Send(new RenameInventoryItem("321", "Bonde", 2));
+eb.Send(new CreateInventoryItem("id2", "Mutter model 2"));
+eb.Send(new CheckInItemsToInventory("id2", 7, 0));
+eb.Send(new RemoveItemsFromInventory("id2", 3, 1));
+eb.Send(new RenameInventoryItem("id2", "Mutter no2", 2));
 
 console.log("\n\nList from Readmodel:", rmf.GetInventoryItems());
-console.log("\n\nDetails Readmodel:", rmf.GetInventoryItemDetails("321"));
+console.log("\n\nDetails Readmodel:", rmf.GetInventoryItemDetails("id2"));
