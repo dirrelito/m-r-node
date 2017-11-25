@@ -4,8 +4,10 @@
   "description": "This will be a clone of the M-R app that is the standard CQRS implementation by Greg Young.",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node CQRSServer/index.ts --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node --watch CQRSServer/index.ts ",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon -e ts -w ./ -x npm run watch:serve",
+    "watch:serve": "ts-node --inspect CQRSServer/index.ts"
   },
   "author": "Ludvig Hult",
   "license": "ISC",
