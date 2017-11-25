@@ -7,10 +7,13 @@ export const router = express.Router();
 router.get("/", (req, res) => {
     res.json({
             commands: [
-
-                {command: "List items", url: "/InventoryItem", method: "GET", comment: "Lists all items"},
-                {command: "Find item details", url: "/InventoryItem/:id", method: "GET"},
-                {command: "Deactivate item", url: "/InventoryItem/:id", method: "DELETE"},
+                {command: "List items", method: "GET",
+                 url: "/InventoryItem"},
+                {command: "Find item details",  method: "GET",
+                 url: "/InventoryItem/:id"},
+                {command: "Deactivate item", method: "DELETE",
+                 params: "Send JSON body with field 'version'",
+                 url: "/InventoryItem/:id"},
                 {command: "Rename item", method: "PATCH",
                  params: "Send JSON body with fields 'expectedVersion' and 'name'",
                  url: "/InventoryItem/:id"},
