@@ -20,7 +20,9 @@ export class ItemCommandService {
         const count = parseInt(req.body.count, 10);
         const expectedVersion = parseInt(req.body.expectedVersion, 10);
         const id = req.params.id;
-        if (isNaN(count) || isNaN(expectedVersion) || id == null) {
+        if (isNaN(count)) {
+            res.status(422).json("Input 'count' is not a number.");
+        } else if (isNaN(expectedVersion) || id == null) {
             res.status(422).json("Bad input.");
         } else {
             console.log(new RemoveItemsFromInventory(id, count, expectedVersion));
