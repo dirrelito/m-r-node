@@ -41,7 +41,7 @@ export class InventoryItem extends AggregateRoot {
     constructor(id: uuid, name: string);
     constructor(id?: uuid, name?: string) {
         super();
-        if (id && name) { this.ApplyChange1(new InventoryItemCreated(id, name));} 
+        if (id && name) { this.ApplyChange1(new InventoryItemCreated(id, name)); }
     }
 
     public Apply(event: DomainEvent) {
@@ -95,7 +95,7 @@ export class Repository<T extends AggregateRoot> implements IRepository<T> {
     }
 
     public GetById(id: uuid): T {
-        const obj: T = new this.factory(); // this doesn't work, since it calls a 2-arg-constructor using 0 args.
+        const obj: T = new this.factory();
         // console.log("the 'clean' state to apply on", obj);
         const events = this.storage.GetEventsForAggregate(id);
         // console.log("events to reconstruct from", events);
