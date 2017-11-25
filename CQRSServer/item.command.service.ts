@@ -1,5 +1,6 @@
 import { Request, Response } from "../node_modules/@types/express/index";
-import {RemoveItemsFromInventory, RenameInventoryItem, CheckInItemsToInventory, DeactivateInventoryItem } from "../SimpleCQRS/Commands";
+import {RemoveItemsFromInventory, RenameInventoryItem, CheckInItemsToInventory, DeactivateInventoryItem, CreateInventoryItem } from "../SimpleCQRS/Commands";
+import {v4 as uuid} from "uuid";
 
 export class ItemCommandService {
 
@@ -48,5 +49,13 @@ export class ItemCommandService {
             console.log(new DeactivateInventoryItem(id, expectedVersion));
             res.json("dispatched deactivate command!");
         }
+    }
+
+    public static createItem = (req: Request, res: Response) => {
+        const newName = req.body.name;
+        const id = uuid();
+        console.log(new CreateInventoryItem(id, newName));
+        res.location(`/api/IventoryItem/${id}`);
+        res.status(202).end();
     }
 }

@@ -47,3 +47,7 @@ router.post("/InventoryItem/:id/CheckIn", (req, res) => {
 router.post("/InventoryItem/:id/Remove", (req, res) => {
     ItemCommandService.removeItems(req, res);
 });
+
+router.post("/InventoryItem", (req, res) => {
+    ItemCommandService.createItem(req, res);
+})
