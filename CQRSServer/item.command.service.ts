@@ -1,6 +1,21 @@
-import { Request, Response } from "../node_modules/@types/express/index";
-import {RemoveItemsFromInventory, RenameInventoryItem, CheckInItemsToInventory, DeactivateInventoryItem, CreateInventoryItem } from "../SimpleCQRS/Commands";
 import {v4 as uuid} from "uuid";
+import { Request, Response } from "../node_modules/@types/express/index";
+import { InventoryCommandHandlers } from "../SimpleCQRS/CommandHandlers";
+import {CheckInItemsToInventory, CreateInventoryItem, DeactivateInventoryItem,
+     RemoveItemsFromInventory, RenameInventoryItem, Command } from "../SimpleCQRS/Commands";
+import { InventoryItem, IRepository, Repository } from "../SimpleCQRS/Domain";
+import { EventStore } from "../SimpleCQRS/EventStore";
+import { eventbus } from "./eventbus";
+
+const es = new EventStore(eventbus);
+const repo: IRepository<InventoryItem> = new Repository(es, InventoryItem);
+const ch = new InventoryCommandHandlers(repo);
+
+eventbus.RegisterHandler({handle: ch.Handle,
+                          messagesHandeled: [
+                        CreateInventoryItem, RenameInventoryItem, DeactivateInventoryItem
+                        , CheckInItemsToInventory, RemoveItemsFromInventory,
+                    ]});
 
 export class ItemCommandService {
 
@@ -11,7 +26,7 @@ export class ItemCommandService {
         if (newName == null || expectedVersion == null) {
             res.status(422).json("Bad input.");
         } else {
-            console.log(new RenameInventoryItem(id, newName, expectedVersion));
+            eventbus.Send(new RenameInventoryItem(id, newName, expectedVersion));
             res.json("dispatched rename command!");
         }
     }
@@ -25,7 +40,7 @@ export class ItemCommandService {
         } else if (isNaN(expectedVersion) || id == null) {
             res.status(422).json("Bad input.");
         } else {
-            console.log(new RemoveItemsFromInventory(id, count, expectedVersion));
+            eventbus.Send(new RemoveItemsFromInventory(id, count, expectedVersion));
             res.json("dispatched remove command!");
         }
     }
@@ -35,7 +50,7 @@ export class ItemCommandService {
         const expectedVersion = parseInt(req.body.expectedVersion, 10);
         const id = req.params.id;
         if (!isNaN(count) && !isNaN(expectedVersion)) {
-            console.log(new CheckInItemsToInventory(id, count, expectedVersion));
+            eventbus.Send(new CheckInItemsToInventory(id, count, expectedVersion));
             res.json("dispatched checkin command!");
         } else {
             res.status(422).json("Bad input.");
@@ -48,7 +63,7 @@ export class ItemCommandService {
         if (id == null || expectedVersion == null) {
             res.status(422).json("bad input.");
         } else {
-            console.log(new DeactivateInventoryItem(id, expectedVersion));
+            eventbus.Send(new DeactivateInventoryItem(id, expectedVersion));
             res.json("dispatched deactivate command!");
         }
     }
@@ -56,7 +71,7 @@ export class ItemCommandService {
     public static createItem = (req: Request, res: Response) => {
         const newName = req.body.name;
         const id = uuid();
-        console.log(new CreateInventoryItem(id, newName));
+        eventbus.Send(new CreateInventoryItem(id, newName));
         res.location(`/api/IventoryItem/${id}`);
         res.status(202).end();
     }
