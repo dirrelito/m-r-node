@@ -1,8 +1,8 @@
 import {v4 as uuid} from "uuid";
 import { Request, Response } from "../node_modules/@types/express/index";
 import { InventoryCommandHandlers } from "../SimpleCQRS/CommandHandlers";
-import {CheckInItemsToInventory, CreateInventoryItem, DeactivateInventoryItem,
-     RemoveItemsFromInventory, RenameInventoryItem, Command } from "../SimpleCQRS/Commands";
+import {CheckInItemsToInventory, Command, CreateInventoryItem, DeactivateInventoryItem,
+     RemoveItemsFromInventory, RenameInventoryItem } from "../SimpleCQRS/Commands";
 import { InventoryItem, IRepository, Repository } from "../SimpleCQRS/Domain";
 import { EventStore } from "../SimpleCQRS/EventStore";
 import { eventbus } from "./eventbus";
