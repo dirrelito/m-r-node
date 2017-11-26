@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "project": {
+    "name": "SimplestPossibleThing"
+  },
+  "apps": [
+    {
+      "root": "CQRSGui",
+      "outDir": "CQRSGuiCompiled",
+      "index": "index.html",
+      "main": "main.ts",
+      "polyfills": "polyfills.ts",
+      "styles": [
+        "styles.css"
+      ]
+    }
+  ]
+}

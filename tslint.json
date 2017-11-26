@@ -3,7 +3,6 @@
     "rules": {
         "arrow-parens": [true,"ban-single-arg-parens"],
         "quotemarks": ["single"],
-        "max-classes-per-file":false,
-        "no-implicit-dependencies": [true, "dev"]
+        "max-classes-per-file":false
     }
 }
