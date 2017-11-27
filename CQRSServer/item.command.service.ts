@@ -72,7 +72,6 @@ export class ItemCommandService {
         const newName = req.body.name;
         const id = uuid();
         eventbus.Send(new CreateInventoryItem(id, newName));
-        res.location(`/api/IventoryItem/${id}`);
-        res.status(202).end();
+        res.location(`/api/IventoryItem/${id}`).status(202).end();
     }
 }
