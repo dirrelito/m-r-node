@@ -1,3 +1,7 @@
 <h2>All items:</h2>
-<ul></ul>
-<a routerLink="/AddItem">Add</a>
+<ul>
+  <li *ngFor="let item of items">
+    {{item.Name}}
+  </li>
+</ul>
+<a routerLink="/addItem">Add</a>

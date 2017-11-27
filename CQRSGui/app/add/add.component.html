@@ -1,5 +1,5 @@
 
 
-Name:  <input type="text"><br/>
-<button>Submit</button>
+Name:  <input #name (keyup.enter)="addItem(name.value);name.value=''" type="text"><br/>
+<button (click)="addItem(name.value);name.value=''">Submit</button>
 

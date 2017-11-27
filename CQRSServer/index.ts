@@ -1,5 +1,7 @@
 import * as bodyParser from "body-parser";
+import * as cors from "cors";
 import * as express from "express";
+import { NextFunction, Response } from "express";
 import {router} from "./routes";
 
 const app = express();
@@ -8,6 +10,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(express.static(publicweb));
 // console.log(`serving ${publicweb}`);
+
+app.use((req, res, next) => {
+  console.log(new Date(), req.method, req.url, req.headers.origin);
+  next();
+});
+
+app.use(cors({
+  exposedHeaders: ["Location"],
+}));
 
 app.use("/api", router);
 
