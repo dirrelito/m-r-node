@@ -23,6 +23,9 @@ router.get("/", (req, res) => {
                 {command: "Remove items", method: "POST",
                  params: "Send JSON body with fields 'expectedVersion' and 'count'",
                  url: "/InventoryItem/:id/Remove"},
+                {command: "Create item", method: "POST",
+                 params: "Send JSON body with field 'name'",
+                 url: "/InventoryItem/"},
             ],
             title: "List of commands for this API",
         });
