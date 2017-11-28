@@ -1,22 +1,20 @@
-import { Component, OnInit } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { ActivatedRoute, Params } from '@angular/router';
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute, Params } from "@angular/router";
+import { Observable } from "rxjs/Observable";
 
 @Component({
-  selector: 'app-details',
-  templateUrl: './details.component.html',
+  selector: "app-details",
+  templateUrl: "./details.component.html",
 })
 export class DetailsComponent implements OnInit {
-  public item;
+  public id;
+  public item: Observable<any>;
 
   constructor(private http: HttpClient, private route: ActivatedRoute) { }
 
   public ngOnInit() {
-    this.route.params.subscribe((p: Params) => {
-      const id = p.id;
-      this.http.get("http://localhost:3000/api/InventoryItem/" + id).subscribe(
-        data => {  this.item = data; },
-        err => { console.log("Something went wrong:", err); });
-    });
+    this.id = this.route.snapshot.params.id;
+    this.item = this.http.get("http://localhost:3000/api/InventoryItem/" + this.id);
   }
 }

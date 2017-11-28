@@ -5,8 +5,12 @@ import { BrowserModule } from "@angular/platform-browser";
 import { AddComponent } from "./add/add.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
+import { CheckInComponent } from "./checkIn/checkIn.component";
+import { DeactivateComponent } from "./deactivate/deactivate.component";
+import { DetailsComponent } from "./details/details.component";
 import { HomeComponent } from "./home/home.component";
-import { DetailsComponent } from './details/details.component';
+import { RemoveComponent } from "./remove/remove.component";
+import { RenameComponent } from "./rename/rename.component";
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -15,6 +19,10 @@ import { DetailsComponent } from './details/details.component';
     AppComponent,
     HomeComponent,
     DetailsComponent,
+    RenameComponent,
+    DeactivateComponent,
+    CheckInComponent,
+    RemoveComponent,
   ],
   imports: [
     BrowserModule,

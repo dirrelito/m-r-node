@@ -6,6 +6,8 @@ import {CheckInItemsToInventory, Command, CreateInventoryItem, DeactivateInvento
 import { InventoryItem, IRepository, Repository } from "../SimpleCQRS/Domain";
 import { EventStore } from "../SimpleCQRS/EventStore";
 import { eventbus } from "./eventbus";
+import { ReadModel } from "./item.read.model";
+import * as e from "etag";
 
 const es = new EventStore(eventbus);
 const repo: IRepository<InventoryItem> = new Repository(es, InventoryItem);
@@ -20,13 +22,15 @@ eventbus.RegisterHandler({handle: ch.Handle,
 export class ItemCommandService {
 
     public static renameItem = (req: Request, res: Response) => {
-        const newName = req.body.name;
+        const name = req.body.name;
         const expectedVersion = req.body.expectedVersion;
         const id = req.params.id;
-        if (newName == null || expectedVersion == null) {
-            res.status(422).json("Bad input.");
+        if (name == null) {
+          res.status(422).json("Bad input. Mssing field 'name' in data.");
+        } else if (expectedVersion == null) {
+            res.status(422).json("Bad input. Mssing field 'expectedVersion' in data.");
         } else {
-            eventbus.Send(new RenameInventoryItem(id, newName, expectedVersion));
+            eventbus.Send(new RenameInventoryItem(id, name, expectedVersion));
             res.json("dispatched rename command!");
         }
     }
@@ -59,11 +63,17 @@ export class ItemCommandService {
 
     public static deactivateItem = (req: Request, res: Response) => {
         const id = req.params.id;
-        const expectedVersion = req.body.version;
-        if (id == null || expectedVersion == null) {
-            res.status(422).json("bad input.");
+
+        const currentItem = ReadModel.readModelFacade.GetInventoryItemDetails(id); // BAD! should be DI'ed.
+        const etag = req.headers.etag;
+
+        // generated a weak etag. but the tag i got from headers is prefixed with "W/";
+        const e2 = "W/" + e(JSON.stringify(currentItem));
+
+        if (e2 !== etag) {
+            res.status(422).json(`Got ETag ${etag} but expected ${e2}`);
         } else {
-            eventbus.Send(new DeactivateInventoryItem(id, expectedVersion));
+            eventbus.Send(new DeactivateInventoryItem(id, currentItem.Version));
             res.json("dispatched deactivate command!");
         }
     }

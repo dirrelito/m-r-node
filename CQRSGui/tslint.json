@@ -1,4 +1,4 @@
 {
   "extends": "../tslint.json",
-  "no-submodule-imports": [true, "@angular/common/http"]
+  "no-submodule-imports": [true, "@angular/common/http", "rxjs/Observable","rxjs/Operators"]
 }

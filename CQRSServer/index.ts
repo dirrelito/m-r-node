@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 });
 
 app.use(cors({
-  exposedHeaders: ["Location"],
+  exposedHeaders: ["Location", "ETag"],
 }));
 
 app.use("/api", router);

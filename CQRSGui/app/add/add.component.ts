@@ -18,7 +18,6 @@ export class AddComponent {
               {observe: "response", responseType: "text" })
         .subscribe((res: HttpResponse<any>) => {
           if (res.status === 202) {
-            console.log(res.headers.get("Location"));
             this.router.navigateByUrl("/home");
         }});
 }
