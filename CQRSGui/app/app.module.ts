@@ -6,6 +6,7 @@ import { AddComponent } from "./add/add.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
+import { DetailsComponent } from './details/details.component';
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -13,6 +14,7 @@ import { HomeComponent } from "./home/home.component";
     AddComponent,
     AppComponent,
     HomeComponent,
+    DetailsComponent,
   ],
   imports: [
     BrowserModule,
