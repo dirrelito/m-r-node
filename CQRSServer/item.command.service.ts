@@ -22,15 +22,20 @@ eventbus.RegisterHandler({handle: ch.Handle,
 export class ItemCommandService {
 
     public static renameItem = (req: Request, res: Response) => {
-        const name = req.body.name;
-        const expectedVersion = req.body.expectedVersion;
+        const newName = req.body.name;
         const id = req.params.id;
-        if (name == null) {
+
+        const currentItem = ReadModel.readModelFacade.GetInventoryItemDetails(id); // BAD! should be DI'ed.
+        const etag = req.headers.etag;
+        // generated a weak etag. but the tag i got from headers is prefixed with "W/";
+        const e2 = "W/" + e(JSON.stringify(currentItem));
+
+        if (newName == null) {
           res.status(422).json("Bad input. Mssing field 'name' in data.");
-        } else if (expectedVersion == null) {
-            res.status(422).json("Bad input. Mssing field 'expectedVersion' in data.");
+        } else  if (e2 !== etag) {
+            res.status(422).json(`Got ETag ${etag} but expected ${e2}`);
         } else {
-            eventbus.Send(new RenameInventoryItem(id, name, expectedVersion));
+            eventbus.Send(new RenameInventoryItem(id, newName, currentItem.Version));
             res.json("dispatched rename command!");
         }
     }

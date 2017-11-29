@@ -40,6 +40,16 @@ export class ItemService {
               {observe: "response", headers: hdrs})
         .pipe(map((res: HttpResponse<any>) => res.status));
   }
+
+  public renameItem(name: string, Id: string, Version: number) {
+    const etag = this.tagMap.get(Id + Version);
+    const hdrs = new HttpHeaders({ETag: etag});
+    return this.http
+        .patch(`http://localhost:3000/api/InventoryItem/${Id}`,
+              {name},
+              {observe: "response", headers: hdrs})
+        .pipe(map((res: HttpResponse<any>) => res.status));
+  }
 }
 
 class ItemDto {
