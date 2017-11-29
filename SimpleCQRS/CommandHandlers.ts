@@ -12,34 +12,28 @@ export class InventoryCommandHandlers {
     public  Handle = (message: Command) => {
         let i;
         if (message instanceof CreateInventoryItem) {
-            // console.log("created new")
-            i = new InventoryItem(message.inventoryItemId, message.name);
-            // console.log("when handling:", message, i)
+            i = new InventoryItem(message.id, message.name);
             this.repository.Save(i, -1);
 
         } else if (message instanceof DeactivateInventoryItem) {
-            // console.log("deactivate");
             i = this.repository.GetById(message.id);
             i.Deactivate();
-            this.repository.Save(i, message.originalVersion);
+            this.repository.Save(i, message.version);
 
         } else if (message instanceof RemoveItemsFromInventory) {
-            i = this.repository.GetById(message.InventoryItemId);
-            i.Remove(message.Count);
-            this.repository.Save(i, message.OriginalVersion);
+            i = this.repository.GetById(message.id);
+            i.Remove(message.count);
+            this.repository.Save(i, message.version);
 
         } else if (message instanceof CheckInItemsToInventory) {
-            i = this.repository.GetById(message.InventoryItemId);
-            i.CheckIn(message.Count);
-            this.repository.Save(i, message.OriginalVersion);
+            i = this.repository.GetById(message.id);
+            i.CheckIn(message.count);
+            this.repository.Save(i, message.version);
 
         } else if (message instanceof RenameInventoryItem) {
-            // console.log("renamed");
-            i  = this.repository.GetById(message.InventoryItemId);
-            // console.log("before renaming:", i);
-            i.ChangeName(message.NewName);
-            // console.log("after renaming:", i);
-            this.repository.Save(i, message.OriginalVersion);
+            i  = this.repository.GetById(message.id);
+            i.ChangeName(message.name);
+            this.repository.Save(i, message.version);
 
         } else {
             throw new InvalidHandlerError("This handler cannot handle this command!");

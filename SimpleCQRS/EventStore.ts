@@ -9,12 +9,9 @@ export interface IEventStore {
 }
 
 export class EventStore implements IEventStore {
-    private readonly publisher;
     private readonly current: Map<uuid, EventDescriptor[]>  = new Map();
 
-    constructor(publisher: IEventPublisher) {
-        this.publisher = publisher;
-    }
+    constructor(private readonly publisher: IEventPublisher) {}
 
     public SaveEvents = (aggregateId, eventsToCommit, expectedVersion) => {
 
@@ -22,19 +19,20 @@ export class EventStore implements IEventStore {
         let eventDescriptors = this.current.get(aggregateId);
         // otherwise -> create empty dictionary
         if (typeof eventDescriptors === "undefined") {
-            eventDescriptors = [];
-            this.current.set(aggregateId, eventDescriptors);
+          eventDescriptors = [];
+          this.current.set(aggregateId, eventDescriptors);
+          // console.log(new Date(), "New Aggregate", aggregateId, eventsToCommit, expectedVersion);
 
-        // check whether latest event version matches current aggregate version
-        // otherwise -> throw Error
+          // check whether latest event version matches current aggregate version
+          // otherwise -> throw Error
         } else if (
-            eventDescriptors[eventDescriptors.length - 1].Version !== expectedVersion
-            && expectedVersion !== -1) {
+          eventDescriptors[eventDescriptors.length - 1].Version !== expectedVersion
+          && expectedVersion !== -1) {
             throw new ConcurrencyError();
         }
         let i = expectedVersion;
 
-        // iterate through current aggregate events increasing version with each processed event
+          // iterate through current aggregate events increasing version with each processed event
         for (const thisEvent of eventsToCommit) {
             i = i + 1;
             thisEvent.Version = i;
@@ -53,7 +51,8 @@ export class EventStore implements IEventStore {
         const eventDescriptors = this.current.get(aggregateId);
 
         if (typeof eventDescriptors === "undefined") {
-            throw new AggregateNotFoundError();
+            throw new AggregateNotFoundError(`Could not find aggregate ${aggregateId}.
+            The known aggregates are: ${[...this.current.keys()]}`);
         } else {
             return eventDescriptors.map(desc => desc.EventData);
         }

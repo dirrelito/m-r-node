@@ -46,7 +46,7 @@ export class InventoryItem extends AggregateRoot {
 
     public Apply(event: DomainEvent) {
         if (event instanceof InventoryItemCreated) {
-            this.id = event.Id;
+            this.id = event.id;
             this.activated = true;
         } else if (event instanceof InventoryItemDeactivated) {
             this.activated = false;
@@ -90,7 +90,7 @@ export class Repository<T extends AggregateRoot> implements IRepository<T> {
     }
 
     public Save(aggregate: AggregateRoot,  expectedVersion: number) {
-        // console.log("when saving:",aggregate,expectedVersion)
+        // console.log( new Date(), "Save(..)", aggregate, expectedVersion);
         this.storage.SaveEvents(aggregate.id, aggregate.GetUncommittedChanges(), expectedVersion);
     }
 

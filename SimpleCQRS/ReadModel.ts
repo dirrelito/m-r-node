@@ -36,17 +36,17 @@ class InventoryItemListDto {
 export class InventoryListView {
 
         public Handle(message: InventoryItemCreated | InventoryItemRenamed | InventoryItemDeactivated) {
-        // console.log(`Handling the event ${message} in the list view`);
+
         if (message instanceof InventoryItemCreated) {
-            BullShitDatabase.list.push(new InventoryItemListDto(message.Id, message.Name));
-            // console.log("added!", BullShitDatabase.list)
+            BullShitDatabase.list.push(new InventoryItemListDto(message.id, message.name));
+
         } else if (message instanceof InventoryItemRenamed) {
-            const itemPos = BullShitDatabase.list.findIndex(x => x.Id === message.Id);
-            BullShitDatabase.list[itemPos].Name = message.NewName;
-            // console.log("renamed!", BullShitDatabase.list)
+            const itemPos = BullShitDatabase.list.findIndex(x => x.Id === message.id);
+            BullShitDatabase.list[itemPos].Name = message.newName;
+
         } else if (message instanceof InventoryItemDeactivated) {
-            BullShitDatabase.list = BullShitDatabase.list.filter(x => x.Id !== message.Id);
-            // console.log("removed!", BullShitDatabase.list)
+            BullShitDatabase.list = BullShitDatabase.list.filter(x => x.Id !== message.id);
+
         } else {
             throw new Error("This Handler cannot handle this message type!");
         }
@@ -64,33 +64,29 @@ export class InventoryItemDetailView {
     public Handle(message: ItemsCheckedInToInventory | ItemsRemovedFromInventory | InventoryItemCreated |
         InventoryItemDeactivated | InventoryItemRenamed) {
 
-        // console.log(`Handling the ${message.constructor.name}: ${JSON.stringify(message)} in the details view`);
-
         if (message instanceof InventoryItemCreated) {
-            BullShitDatabase.details.set(message.Id, new InventoryItemDetailsDto(message.Id, message.Name, 0, 0));
+            BullShitDatabase.details.set(message.id, new InventoryItemDetailsDto(message.id, message.name, 0, 0));
 
         } else if (message instanceof InventoryItemRenamed) {
-            const d = InventoryItemDetailView.GetDetailsItem(message.Id);
-            d.Version = message.Version;
-            d.Name = message.NewName;
-            // console.log("input message:", message)
-            // console.log("Updated DTO:",d)
-            BullShitDatabase.details.set(message.Id, d);
+            const d = InventoryItemDetailView.GetDetailsItem(message.id);
+            d.Version = message.version;
+            d.Name = message.newName;
+            BullShitDatabase.details.set(message.id, d);
 
         } else if (message instanceof ItemsCheckedInToInventory) {
-            const d = InventoryItemDetailView.GetDetailsItem(message.Id);
-            d.Version = message.Version;
-            d.CurrentCount = d.CurrentCount + message.Count;
-            BullShitDatabase.details.set(message.Id, d);
+            const d = InventoryItemDetailView.GetDetailsItem(message.id);
+            d.Version = message.version;
+            d.CurrentCount = d.CurrentCount + message.count;
+            BullShitDatabase.details.set(message.id, d);
 
         } else if (message instanceof ItemsRemovedFromInventory) {
-            const d: InventoryItemDetailsDto = InventoryItemDetailView.GetDetailsItem(message.Id);
-            d.Version = message.Version;
-            d.CurrentCount = d.CurrentCount - message.Count;
-            BullShitDatabase.details.set(message.Id, d);
+            const d: InventoryItemDetailsDto = InventoryItemDetailView.GetDetailsItem(message.id);
+            d.Version = message.version;
+            d.CurrentCount = d.CurrentCount - message.count;
+            BullShitDatabase.details.set(message.id, d);
 
         } else if (message instanceof InventoryItemDeactivated) {
-            BullShitDatabase.details.delete(message.Id);
+            BullShitDatabase.details.delete(message.id);
 
         }  else {
             throw new Error("This Handler cannot handle this message type!");
