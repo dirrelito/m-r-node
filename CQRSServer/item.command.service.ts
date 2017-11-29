@@ -42,15 +42,20 @@ export class ItemCommandService {
 
     public static removeItems = (req: Request, res: Response) => {
         const count = parseInt(req.body.count, 10);
-        const expectedVersion = parseInt(req.body.expectedVersion, 10);
         const id = req.params.id;
+
+        const currentItem = ReadModel.readModelFacade.GetInventoryItemDetails(id); // BAD! should be DI'ed.
+        const etag = req.headers.etag;
+        // generated a weak etag. but the tag i got from headers is prefixed with "W/";
+        const e2 = "W/" + e(JSON.stringify(currentItem));
+
         if (isNaN(count)) {
-            res.status(422).json("Input 'count' is not a number.");
-        } else if (isNaN(expectedVersion) || id == null) {
-            res.status(422).json("Bad input.");
+          res.status(422).json("Bad input. 'count' is not a number.");
+        } else  if (e2 !== etag) {
+          res.status(422).json(`Got ETag ${etag} but expected ${e2}`);
         } else {
-            eventbus.Send(new RemoveItemsFromInventory(id, count, expectedVersion));
-            res.json("dispatched remove command!");
+          eventbus.Send(new RemoveItemsFromInventory(id, count, currentItem.Version));
+          res.json("dispatched remove command!");
         }
     }
 

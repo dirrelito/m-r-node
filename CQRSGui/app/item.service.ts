@@ -60,6 +60,16 @@ export class ItemService {
               {observe: "response", headers: hdrs})
         .pipe(map((res: HttpResponse<any>) => res.status));
   }
+
+  public remove(count, Id, Version) {
+    const etag = this.tagMap.get(Id + Version);
+    const hdrs = new HttpHeaders({ETag: etag});
+    return this.http
+        .post(`http://localhost:3000/api/InventoryItem/${Id}/Remove`,
+              {count},
+              {observe: "response", headers: hdrs})
+        .pipe(map((res: HttpResponse<any>) => res.status));
+  }
 }
 
 class ItemDto {
