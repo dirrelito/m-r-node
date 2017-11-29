@@ -1,4 +1,3 @@
-import { HttpClient } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
 import { ItemService } from "../item.service";
 
@@ -11,7 +10,6 @@ export class HomeComponent implements OnInit {
   constructor(private itemService: ItemService) {}
 
   public ngOnInit(): void {
-    this.itemService.getAllItems().subscribe(
-      data => {  this.items = data; });
+    this.itemService.getAllItems().subscribe(data => { this.items = data; });
   }
 }

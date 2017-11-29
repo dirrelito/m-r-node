@@ -1,6 +1,6 @@
+import { Component, OnInit } from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 
-import { Component, OnInit } from "@angular/core";
 import { ItemService } from "../item.service";
 
 @Component({
@@ -14,8 +14,7 @@ export class RenameComponent {
 
   public ngOnInit(): void {
     this.id = this.route.snapshot.params.id;
-    this.itemService.getItem(this.id).subscribe(
-      data => {  this.expectedVersion = data.Version; });
+    this.itemService.getItem(this.id).subscribe(data => { this.expectedVersion = data.Version; });
   }
 
   public renameItem(name) {

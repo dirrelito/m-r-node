@@ -14,7 +14,6 @@ export class DetailsComponent implements OnInit {
   constructor(private itemService: ItemService, private route: ActivatedRoute) { }
 
   public ngOnInit() {
-    this.item = this.itemService
-                    .getItem(this.route.snapshot.params.id);
+    this.item = this.itemService.getItem(this.route.snapshot.params.id);
   }
 }
