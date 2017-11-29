@@ -4,10 +4,10 @@ Id: {{(item | async)?.Id}}<br>
 Name: {{(item | async)?.Name}}<br>
 Count: {{(item | async)?.CurrentCount}}<br>
 <br>
-<a routerLink="/rename/{{id}}">Rename</a><br>
-<a routerLink="/deactivate/{{id}}">Deactivate</a><br>
-<a routerLink="/checkIn/{{id}}">Check in</a><br>
-<a routerLink="/remove/{{id}}">Remove</a><br>
+<a routerLink="/rename/{{(item | async)?.Id}}">Rename</a><br>
+<a routerLink="/deactivate/{{(item | async)?.Id}}">Deactivate</a><br>
+<a routerLink="/checkIn/{{(item | async)?.Id}}">Check in</a><br>
+<a routerLink="/remove/{{(item | async)?.Id}}">Remove</a><br>
 
 
 

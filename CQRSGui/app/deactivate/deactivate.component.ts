@@ -4,33 +4,33 @@ import {ActivatedRoute, Router} from "@angular/router";
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { map } from "rxjs/Operators";
+import { ItemService } from "../item.service";
 
 @Component({
   templateUrl: "./deactivate.component.html",
 })
 export class DeactivateComponent implements OnInit {
 
-  private item;
-  private id;
-  private etag;
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {}
+  private item: Observable<{Name, Version, Id}>;
+  private lastItem: {Id, Version};
+  private version;
+  constructor(private http: HttpClient, private router: Router,
+              private route: ActivatedRoute, private itemService: ItemService) {}
 
   public ngOnInit(): void {
-    this.id = this.route.snapshot.params.id;
-    const tmp: Observable<HttpResponse<any>> = this.http
-                      .get<any>("http://localhost:3000/api/InventoryItem/" + this.id, {observe: "response"});
-    this.item = tmp.pipe(map(resp => resp.body));
-    tmp.subscribe(resp => this.etag = resp.headers.get("ETag"));
+    const id = this.route.snapshot.params.id;
+    this.item = this.itemService.getItem(id);
+    this.item.subscribe(i => {
+      this.lastItem = i;
+    });
   }
 
   public deactivateItem() {
-    const hdrs = new HttpHeaders({ETag: this.etag});
-    this.http
-        .delete(`http://localhost:3000/api/InventoryItem/${this.id}`,
-              {observe: "response", headers: hdrs})
-        .subscribe((res: HttpResponse<any>) => {
-          if (res.status === 200) {
-            this.router.navigateByUrl("/home");
-        }});
+
+    this.itemService
+        .deactivateItem(this.lastItem.Id, this.lastItem.Version)
+        .subscribe((status: number) => {
+          if (status === 200) { this.router.navigateByUrl("/home"); }
+        });
       }
 }
