@@ -25,5 +25,5 @@ export class CheckInComponent implements OnInit {
           if (status === 200) {
             this.router.navigateByUrl("/home");
         }});
-      }
+  }
 }
