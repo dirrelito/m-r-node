@@ -10,17 +10,7 @@ export interface IReadModelFacade {
 }
 
 class InventoryItemDetailsDto {
-    public id: uuid ;
-    public name: string ;
-    public currentCount: number ;
-    public version: number ;
-
-    constructor(id: uuid,  name: string,  currentCount: number, Version: number) {
-        this.id = id;
-        this.name = name;
-        this.currentCount = currentCount;
-        this.version = Version;
-    }
+    constructor(public id: uuid, public name: string, public currentCount: number, public version: number) { }
 }
 
 class InventoryItemListDto {
