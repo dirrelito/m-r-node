@@ -21,9 +21,8 @@ export class ItemService {
     const item = responseObs.pipe(map(resp => resp.body));
     responseObs.subscribe(resp => {
       const tag = resp.headers.get("ETag");
-      const Version = resp.body.Version;
-      const Id = resp.body.Id;
-      this.tagMap.set(Id + Version, tag);
+      const version = resp.body.version;
+      this.tagMap.set(id + version, tag);
     });
     return item;
   }
@@ -73,8 +72,8 @@ export class ItemService {
 }
 
 class ItemDto {
-  public Id: string;
-  public Version: number;
-  public CurrentCount: number;
-  public Name: string;
+  public id: string;
+  public version: number;
+  public currentCount: number;
+  public name: string;
 }

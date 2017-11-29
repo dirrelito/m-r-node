@@ -10,27 +10,21 @@ export interface IReadModelFacade {
 }
 
 class InventoryItemDetailsDto {
-    public Id: uuid ;
-    public Name: string ;
-    public CurrentCount: number ;
-    public Version: number ;
+    public id: uuid ;
+    public name: string ;
+    public currentCount: number ;
+    public version: number ;
 
     constructor(id: uuid,  name: string,  currentCount: number, Version: number) {
-        this.Id = id;
-        this.Name = name;
-        this.CurrentCount = currentCount;
-        this.Version = Version;
+        this.id = id;
+        this.name = name;
+        this.currentCount = currentCount;
+        this.version = Version;
     }
 }
 
 class InventoryItemListDto {
-    public Id: uuid;
-    public Name: string;
-
-    constructor(id: uuid, name: string) {
-        this.Id = id;
-        this.Name = name;
-    }
+    constructor(public id: uuid, public name: string) {}
 }
 
 export class InventoryListView {
@@ -41,11 +35,11 @@ export class InventoryListView {
             BullShitDatabase.list.push(new InventoryItemListDto(message.id, message.name));
 
         } else if (message instanceof InventoryItemRenamed) {
-            const itemPos = BullShitDatabase.list.findIndex(x => x.Id === message.id);
-            BullShitDatabase.list[itemPos].Name = message.newName;
+            const itemPos = BullShitDatabase.list.findIndex(x => x.id === message.id);
+            BullShitDatabase.list[itemPos].name = message.newName;
 
         } else if (message instanceof InventoryItemDeactivated) {
-            BullShitDatabase.list = BullShitDatabase.list.filter(x => x.Id !== message.id);
+            BullShitDatabase.list = BullShitDatabase.list.filter(x => x.id !== message.id);
 
         } else {
             throw new Error("This Handler cannot handle this message type!");
@@ -64,25 +58,27 @@ export class InventoryItemDetailView {
     public Handle(message: ItemsCheckedInToInventory | ItemsRemovedFromInventory | InventoryItemCreated |
         InventoryItemDeactivated | InventoryItemRenamed) {
 
+        // console.log(new Date(), "Handling DomainEvent in readmodel", message);
+
         if (message instanceof InventoryItemCreated) {
             BullShitDatabase.details.set(message.id, new InventoryItemDetailsDto(message.id, message.name, 0, 0));
 
         } else if (message instanceof InventoryItemRenamed) {
             const d = InventoryItemDetailView.GetDetailsItem(message.id);
-            d.Version = message.version;
-            d.Name = message.newName;
+            d.version = message.version;
+            d.name = message.newName;
             BullShitDatabase.details.set(message.id, d);
 
         } else if (message instanceof ItemsCheckedInToInventory) {
             const d = InventoryItemDetailView.GetDetailsItem(message.id);
-            d.Version = message.version;
-            d.CurrentCount = d.CurrentCount + message.count;
+            d.version = message.version;
+            d.currentCount = d.currentCount + message.count;
             BullShitDatabase.details.set(message.id, d);
 
         } else if (message instanceof ItemsRemovedFromInventory) {
             const d: InventoryItemDetailsDto = InventoryItemDetailView.GetDetailsItem(message.id);
-            d.Version = message.version;
-            d.CurrentCount = d.CurrentCount - message.count;
+            d.version = message.version;
+            d.currentCount = d.currentCount - message.count;
             BullShitDatabase.details.set(message.id, d);
 
         } else if (message instanceof InventoryItemDeactivated) {

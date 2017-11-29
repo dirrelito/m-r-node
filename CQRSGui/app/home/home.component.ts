@@ -5,7 +5,7 @@ import { ItemService } from "../item.service";
   templateUrl: "./home.component.html",
 })
 export class HomeComponent implements OnInit {
-  public items: Array<{Id, Name}>;
+  public items: Array<{id, name}>;
 
   constructor(private itemService: ItemService) {}
 

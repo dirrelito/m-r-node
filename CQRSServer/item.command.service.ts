@@ -101,6 +101,7 @@ const getETagAndVersion = (id: uuid) => {
   const currentItem = ReadModel.readModelFacade.GetInventoryItemDetails(id);
   // etags from express are weak by default, so I add that...
   const ETag = "W/" + e(JSON.stringify(currentItem));
-  const Version = currentItem.Version;
+  const Version = currentItem.version;
+  // console.log(new Date(), "getETag...",`Found an item of current version ${Version}.`);
   return {ETag, Version};
 };

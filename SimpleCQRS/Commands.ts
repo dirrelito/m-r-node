@@ -19,19 +19,19 @@ export class CreateInventoryItem extends Command {
 }
 
 export class RenameInventoryItem extends Command {
-    constructor(public id, public name, public version) {
+    constructor(public id, public name, public version: number) {
         super("RenameInventoryItem");
     }
 }
 
 export class CheckInItemsToInventory extends Command {
-    constructor(public id, public count, public version) {
+    constructor(public id, public count, public version: number) {
         super("CheckInItemsToInventory");
     }
 }
 
 export  class RemoveItemsFromInventory extends Command {
-    constructor(public id, public count, public version) {
+    constructor(public id, public count, public version: number) {
         super("RemoveItemsFromInventory");
     }
 }

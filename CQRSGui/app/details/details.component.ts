@@ -9,7 +9,7 @@ import { ItemService } from "../item.service";
   templateUrl: "./details.component.html",
 })
 export class DetailsComponent implements OnInit {
-  public item: Observable<{Id, Name, CurrentCount, Version}>;
+  public item: Observable<{id, name, currentCount, version}>;
 
   constructor(private itemService: ItemService, private route: ActivatedRoute) { }
 

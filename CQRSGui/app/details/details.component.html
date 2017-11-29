@@ -1,13 +1,13 @@
 <h2>Details:</h2>
 
-Id: {{(item | async)?.Id}}<br>
-Name: {{(item | async)?.Name}}<br>
-Count: {{(item | async)?.CurrentCount}}<br>
+Id: {{(item | async)?.id}}<br>
+Name: {{(item | async)?.name}}<br>
+Count: {{(item | async)?.currentCount}}<br>
 <br>
-<a routerLink="/rename/{{(item | async)?.Id}}">Rename</a><br>
-<a routerLink="/deactivate/{{(item | async)?.Id}}">Deactivate</a><br>
-<a routerLink="/checkIn/{{(item | async)?.Id}}">Check in</a><br>
-<a routerLink="/remove/{{(item | async)?.Id}}">Remove</a><br>
+<a routerLink="/rename/{{(item | async)?.id}}">Rename</a><br>
+<a routerLink="/deactivate/{{(item | async)?.id}}">Deactivate</a><br>
+<a routerLink="/checkIn/{{(item | async)?.id}}">Check in</a><br>
+<a routerLink="/remove/{{(item | async)?.id}}">Remove</a><br>
 
 
 

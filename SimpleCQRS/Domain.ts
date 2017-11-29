@@ -18,18 +18,16 @@ abstract class AggregateRoot {
         // console.log("Commencing load of history:", history);
         for (const event of history) {
             // console.log("Applying event:", event," onto the state ",this);
-            this.ApplyChange2(event, false);
+            this.ApplyChange(event, false);
             // console.log("After applying event:",this)
         }
     }
 
-    protected ApplyChange1(event: DomainEvent) { this.ApplyChange2(event, true); }
-
     // push atomic aggregate changes to local history for further processing (EventStore.SaveEvents)
-    private ApplyChange2(event: DomainEvent,  isNew: boolean) {
-        // console.log("apply2.1", event);
-        this.Apply(event);
-        if (isNew) { this.unCommittedChanges.push(event); }
+    protected ApplyChange(event: DomainEvent,  isNew?: boolean) {
+      // console.log(new Date(), event, isNew);
+      this.Apply(event);
+      if (isNew !== false) { this.unCommittedChanges.push(event); }
     }
 }
 export class InventoryItem extends AggregateRoot {
@@ -41,7 +39,7 @@ export class InventoryItem extends AggregateRoot {
     constructor(id: uuid, name: string);
     constructor(id?: uuid, name?: string) {
         super();
-        if (id && name) { this.ApplyChange1(new InventoryItemCreated(id, name)); }
+        if (id && name) { this.ApplyChange(new InventoryItemCreated(id, name)); }
     }
 
     public Apply(event: DomainEvent) {
@@ -55,22 +53,22 @@ export class InventoryItem extends AggregateRoot {
 
     public  ChangeName(newName: string) {
         if (newName == null) {throw new ArgumentError("newName"); }
-        this.ApplyChange1(new InventoryItemRenamed(this.id, newName));
+        this.ApplyChange(new InventoryItemRenamed(this.id, newName));
     }
 
     public Remove(count: number) {
         if (count <= 0) { throw new InvalidOperationError("cant remove negative count from inventory"); }
-        this.ApplyChange1(new ItemsRemovedFromInventory(this.id, count));
+        this.ApplyChange(new ItemsRemovedFromInventory(this.id, count));
     }
 
     public CheckIn(count: number) {
         if (count <= 0) { throw new InvalidOperationError("must have a count greater than 0 to add to inventory"); }
-        this.ApplyChange1(new ItemsCheckedInToInventory(this.id, count));
+        this.ApplyChange(new ItemsCheckedInToInventory(this.id, count));
     }
 
     public Deactivate() {
         if (!this.activated) { throw new InvalidOperationError("already deactivated"); }
-        this.ApplyChange1(new InventoryItemDeactivated(this.id));
+        this.ApplyChange(new InventoryItemDeactivated(this.id));
     }
 
 }

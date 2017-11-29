@@ -9,8 +9,8 @@ import { ItemService } from "../item.service";
 })
 export class DeactivateComponent implements OnInit {
 
-  private item: Observable<{Name, Version, Id}>;
-  private lastItem: {Id, Version};
+  private item: Observable<{name, version, id}>;
+  private lastItem: {id, version};
   constructor(private router: Router, private route: ActivatedRoute, private itemService: ItemService) {}
 
   public ngOnInit(): void {
@@ -21,7 +21,7 @@ export class DeactivateComponent implements OnInit {
 
   public deactivateItem() {
     this.itemService
-        .deactivateItem(this.lastItem.Id, this.lastItem.Version)
+        .deactivateItem(this.lastItem.id, this.lastItem.version)
         .subscribe((status: number) => {
           if (status === 200) { this.router.navigateByUrl("/home"); }
         });

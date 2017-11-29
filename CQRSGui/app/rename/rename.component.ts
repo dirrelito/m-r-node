@@ -14,7 +14,7 @@ export class RenameComponent {
 
   public ngOnInit(): void {
     this.id = this.route.snapshot.params.id;
-    this.itemService.getItem(this.id).subscribe(data => { this.expectedVersion = data.Version; });
+    this.itemService.getItem(this.id).subscribe(data => { this.expectedVersion = data.version; });
   }
 
   public renameItem(name) {

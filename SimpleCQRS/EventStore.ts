@@ -26,16 +26,17 @@ export class EventStore implements IEventStore {
           // check whether latest event version matches current aggregate version
           // otherwise -> throw Error
         } else if (
-          eventDescriptors[eventDescriptors.length - 1].Version !== expectedVersion
+          eventDescriptors[eventDescriptors.length - 1].version !== expectedVersion
           && expectedVersion !== -1) {
-            throw new ConcurrencyError();
+            throw new ConcurrencyError(`Expected version ${expectedVersion},
+             but found ${eventDescriptors[eventDescriptors.length - 1].version}`);
         }
         let i = expectedVersion;
 
           // iterate through current aggregate events increasing version with each processed event
         for (const thisEvent of eventsToCommit) {
             i = i + 1;
-            thisEvent.Version = i;
+            thisEvent.version = i;
 
             // push event to the event descriptors list for current aggregate
             eventDescriptors.push(new EventDescriptor(aggregateId, thisEvent, i));
@@ -54,21 +55,13 @@ export class EventStore implements IEventStore {
             throw new AggregateNotFoundError(`Could not find aggregate ${aggregateId}.
             The known aggregates are: ${[...this.current.keys()]}`);
         } else {
-            return eventDescriptors.map(desc => desc.EventData);
+            return eventDescriptors.map(desc => desc.eventData);
         }
     }
 }
 
 class EventDescriptor {
-    public readonly EventData: DomainEvent;
-    public readonly Id: uuid;
-    public readonly Version: number;
-
-    constructor(id: uuid, eventData: DomainEvent, version: number) {
-        this.EventData = eventData;
-        this.Version = version;
-        this.Id = id;
-    }
+    constructor(public readonly id: uuid, public readonly eventData: DomainEvent, public readonly version: number) {}
 }
 
 class ConcurrencyError extends Error {}
