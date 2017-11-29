@@ -12,6 +12,10 @@ export class ItemService {
     const i: Observable<ItemDto> = this.http.get<ItemDto>("http://localhost:3000/api/InventoryItem/" + id);
     return i;
   }
+
+  public getAllItems(): Observable<ItemDto[]> {
+    return this.http.get<ItemDto[]>("http://localhost:3000/api/InventoryItem");
+  }
 }
 
 class ItemDto {
