@@ -6,7 +6,7 @@ import { ItemService } from "../item.service";
   templateUrl: "./home.component.html",
 })
 export class HomeComponent implements OnInit {
-  public items: InventoryItemDto[];
+  public items: Array<{Id, Name}>;
 
   constructor(private itemService: ItemService) {}
 
@@ -14,9 +14,4 @@ export class HomeComponent implements OnInit {
     this.itemService.getAllItems().subscribe(
       data => {  this.items = data; });
   }
-}
-
-class InventoryItemDto {
-  public Name: string;
-  public Id: string;
 }
