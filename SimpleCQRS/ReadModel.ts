@@ -66,7 +66,7 @@ export class InventoryItemDetailView {
             BullShitDatabase.details.set(message.id, d);
 
         } else if (message instanceof ItemsRemovedFromInventory) {
-            const d: InventoryItemDetailsDto = InventoryItemDetailView.GetDetailsItem(message.id);
+            const d = InventoryItemDetailView.GetDetailsItem(message.id);
             d.version = message.version;
             d.currentCount = d.currentCount - message.count;
             BullShitDatabase.details.set(message.id, d);
