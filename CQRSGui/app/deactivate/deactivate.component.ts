@@ -1,9 +1,8 @@
 import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
-import {ActivatedRoute, Router} from "@angular/router";
-
 import { Component, OnInit } from "@angular/core";
+import {ActivatedRoute, Router} from "@angular/router";
 import { Observable } from "rxjs/Observable";
-import { map } from "rxjs/Operators";
+
 import { ItemService } from "../item.service";
 
 @Component({
@@ -13,7 +12,6 @@ export class DeactivateComponent implements OnInit {
 
   private item: Observable<{Name, Version, Id}>;
   private lastItem: {Id, Version};
-  private version;
   constructor(private http: HttpClient, private router: Router,
               private route: ActivatedRoute, private itemService: ItemService) {}
 
@@ -26,7 +24,6 @@ export class DeactivateComponent implements OnInit {
   }
 
   public deactivateItem() {
-
     this.itemService
         .deactivateItem(this.lastItem.Id, this.lastItem.Version)
         .subscribe((status: number) => {
