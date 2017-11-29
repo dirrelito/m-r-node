@@ -2,6 +2,11 @@ This is a clone of the M-R library that is the standard CQRS implementation, by 
 
 I also hope to reimplement the front end.
 
+# Instructions
+
+run `npm install`
+then start the back end server with `npm run watch` and the front end server with `ng serve`.
+Run these commands in two different consoles!
 
 # Inspiration 
 
