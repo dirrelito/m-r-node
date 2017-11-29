@@ -56,13 +56,20 @@ export class ItemCommandService {
 
     public static checkInItems = (req: Request, res: Response) => {
         const count = parseInt(req.body.count, 10);
-        const expectedVersion = parseInt(req.body.expectedVersion, 10);
         const id = req.params.id;
-        if (!isNaN(count) && !isNaN(expectedVersion)) {
-            eventbus.Send(new CheckInItemsToInventory(id, count, expectedVersion));
-            res.json("dispatched checkin command!");
+
+        const currentItem = ReadModel.readModelFacade.GetInventoryItemDetails(id); // BAD! should be DI'ed.
+        const etag = req.headers.etag;
+        // generated a weak etag. but the tag i got from headers is prefixed with "W/";
+        const e2 = "W/" + e(JSON.stringify(currentItem));
+
+        if (isNaN(count)) {
+          res.status(422).json("Bad input. 'count' is not a number.");
+        } else  if (e2 !== etag) {
+          res.status(422).json(`Got ETag ${etag} but expected ${e2}`);
         } else {
-            res.status(422).json("Bad input.");
+          eventbus.Send(new CheckInItemsToInventory(id, count, currentItem.Version));
+          res.json("dispatched checkin command!");
         }
     }
 

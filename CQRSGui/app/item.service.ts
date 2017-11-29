@@ -50,6 +50,16 @@ export class ItemService {
               {observe: "response", headers: hdrs})
         .pipe(map((res: HttpResponse<any>) => res.status));
   }
+
+  public checkIn(count, Id, Version) {
+    const etag = this.tagMap.get(Id + Version);
+    const hdrs = new HttpHeaders({ETag: etag});
+    return this.http
+        .post(`http://localhost:3000/api/InventoryItem/${Id}/CheckIn`,
+              {count},
+              {observe: "response", headers: hdrs})
+        .pipe(map((res: HttpResponse<any>) => res.status));
+  }
 }
 
 class ItemDto {

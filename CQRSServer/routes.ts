@@ -18,7 +18,7 @@ router.get("/", (req, res) => {
                  params: "Send JSON body with field 'name', and http header ETag.",
                  url: "/InventoryItem/:id"},
                 {command: "Check in item", method: "POST",
-                 params: "Send JSON body with fields 'expectedVersion' and 'count'",
+                 params: "Send JSON body with field 'count', and http header ETag.",
                  url: "/InventoryItem/:id/CheckIn"},
                 {command: "Remove items", method: "POST",
                  params: "Send JSON body with fields 'expectedVersion' and 'count'",
