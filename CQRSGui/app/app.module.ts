@@ -9,6 +9,7 @@ import { CheckInComponent } from "./checkIn/checkIn.component";
 import { DeactivateComponent } from "./deactivate/deactivate.component";
 import { DetailsComponent } from "./details/details.component";
 import { HomeComponent } from "./home/home.component";
+import { ItemService } from "./item.service";
 import { RemoveComponent } from "./remove/remove.component";
 import { RenameComponent } from "./rename/rename.component";
 
@@ -29,6 +30,6 @@ import { RenameComponent } from "./rename/rename.component";
     AppRoutingModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [ItemService],
 })
 export class AppModule { }
